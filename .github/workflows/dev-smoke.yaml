@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Save commit hash
-        run: echo "${{ github.sha }}" > commit_hash.txt
+        run: echo "${{ github.sha }}" > ~/Desktop/NewsLetter_Website_Using_MailChamp_API/commit_hash.txt
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
