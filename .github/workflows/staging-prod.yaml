@@ -36,7 +36,7 @@ jobs:
 
       - name: Pull Docker image
         run: |
-          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/my-newsletter-apis:${{ steps.commit_hash.outputs.COMMIT_HASH }}
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/my-newsletter-apis:${COMMIT_HASH}
       
       - name: Determine port based on branch name
         id: determine_port
@@ -51,5 +51,5 @@ jobs:
           
       - name: Run Docker container
         run: |
-            docker run -d -p ${{ steps.determine_port.outputs.container_port }}:3000 ${{ secrets.DOCKERHUB_USERNAME }}/my-newsletter-apis:${{ steps.commit_hash.outputs.COMMIT_HASH }}
+            docker run -d -p ${{ steps.determine_port.outputs.container_port }}:3000 ${{ secrets.DOCKERHUB_USERNAME }}/my-newsletter-apis:${COMMIT_HASH}
   
