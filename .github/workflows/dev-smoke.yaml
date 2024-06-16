@@ -39,11 +39,18 @@ jobs:
         run: |
           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/my-newsletter-apis:${{ github.sha }}
       
-      - name: Stop processes on port 3000
+      - name: Determine port based on branch name
+        id: determine_port
         run: |
-            sudo lsof -t -i :3000 | xargs kill -9 || true
+              if [[ "${{ github.ref_name }}" == "dev" ]]; then
+                echo "export CONTAINER_PORT=3000"
+              elif [[ "${{ github.ref_name }}" == "smoke" ]]; then
+                echo "export CONTAINER_PORT=3001"
+              fi
+              echo "Branch name is ${{ github.ref }}"
+              echo "::set-output name=container_port::${CONTAINER_PORT}"
           
       - name: Run Docker container
         run: |
-            docker run -d -p 3000:3000 --name ${{ github.ref_name }}-${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/my-newsletter-apis:${{ github.sha }}
+            docker run -d -p ${{ steps.determine_port.outputs.container_port }}:3000 --name ${{ github.ref_name }}-${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/my-newsletter-apis:${{ github.sha }}
   
