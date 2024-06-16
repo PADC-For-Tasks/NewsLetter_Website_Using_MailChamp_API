@@ -6,7 +6,7 @@ on:
           - main
           - staging
         tags:
-          - '[0-9].+[0-9].+[0-9]'
+          - '[0-9]+\.[0-9]+\.[0-9]+-rc[0-9]+'
 
 
 jobs:
@@ -22,7 +22,7 @@ jobs:
       - name: Read commit hash from artifact
         id: commit_hash
         run: |
-          COMMIT_HASH=$(cat commit_hash.txt)
+          COMMIT_HASH=$(cat ~/Desktop/NewsLetter_Website_Using_MailChamp_API/commit_hash.txt)
           echo "Commit hash from artifact: $COMMIT_HASH"
 
       - name: Set up Docker Buildx
