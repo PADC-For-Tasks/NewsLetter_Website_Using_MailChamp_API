@@ -16,6 +16,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Save commit hash
+        run: echo "${{ github.sha }}" > commit_hash.txt
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
