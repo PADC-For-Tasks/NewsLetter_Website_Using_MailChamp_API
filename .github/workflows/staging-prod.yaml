@@ -19,6 +19,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Read commit hash from artifact
+        id: commit_hash
+        run: |
+          COMMIT_HASH=$(cat commit_hash.txt)
+          echo "Commit hash from artifact: $COMMIT_HASH"
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
@@ -30,7 +36,7 @@ jobs:
 
       - name: Pull Docker image
         run: |
-          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/my-newsletter-apis:latest
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/my-newsletter-apis:${{ steps.commit_hash.outputs.COMMIT_HASH }}
       
       - name: Determine port based on branch name
         id: determine_port
@@ -45,5 +51,5 @@ jobs:
           
       - name: Run Docker container
         run: |
-            docker run -d -p ${{ steps.determine_port.outputs.container_port }}:3000 ${{ secrets.DOCKERHUB_USERNAME }}/my-newsletter-apis:${{ github.sha }}
+            docker run -d -p ${{ steps.determine_port.outputs.container_port }}:3000 ${{ secrets.DOCKERHUB_USERNAME }}/my-newsletter-apis:${{ steps.commit_hash.outputs.COMMIT_HASH }}
   
